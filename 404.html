@@ -1,20 +1,18 @@
 <!doctype html>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lauermann · Lezer Family Archive</title>
 <script>
-  (async () => {
-    const pages = new Set(['families','service','people-edward','people-anamae','family-stories','timeline','places','research','records']);
-    const path = location.pathname.replace(/\/+$/, '');
-    const page = path.split('/').pop();
-    if (!pages.has(page)) return;
-    const response = await fetch(`../${page}.html`);
-    if (!response.ok) return;
-    let html = await response.text();
-    html = html.replace('<head>', '<head><base href="/lauermann.lezer/">');
-    for (const name of pages) html = html.replaceAll(`href="${name}.html"`, `href="/${'lauermann.lezer'}/${name}/"`);
-    html = html.replaceAll('href="index.html"', 'href="/lauermann.lezer/"');
-    document.open(); document.write(html); document.close();
-  })();
+(async () => {
+  const pages = new Set(['families','family-stories','service','people-edward','people-anamae','timeline','places','research','records']);
+  const page = location.pathname.replace(/\/+$/, '').split('/').pop();
+  const base = location.hostname.endsWith('github.io') ? '/lauermann.lezer/' : '/';
+  if (!pages.has(page)) { location.replace(base); return; }
+  const response = await fetch(`${base}${page}.html`);
+  if (!response.ok) { location.replace(base); return; }
+  let html = await response.text();
+  html = html.replace('<head>', `<head><base href="${base}">`);
+  document.open(); document.write(html); document.close();
+})();
 </script>
-<p>Loading the family archive…</p>
+<p>Opening the family archive…</p>
