@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lauermann · Lezer Family Archive</title>
+<script>
+  (async () => {
+    const pages = new Set(['families','service','people-edward','people-anamae','family-stories','timeline','places','research','records']);
+    const path = location.pathname.replace(/\/+$/, '');
+    const page = path.split('/').pop();
+    if (!pages.has(page)) return;
+    const response = await fetch(`../${page}.html`);
+    if (!response.ok) return;
+    let html = await response.text();
+    html = html.replace('<head>', '<head><base href="/lauermann.lezer/">');
+    for (const name of pages) html = html.replaceAll(`href="${name}.html"`, `href="/${'lauermann.lezer'}/${name}/"`);
+    html = html.replaceAll('href="index.html"', 'href="/lauermann.lezer/"');
+    document.open(); document.write(html); document.close();
+  })();
+</script>
+<p>Loading the family archive…</p>
